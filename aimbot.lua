@@ -63,37 +63,6 @@ local Weapons = {
    "Crude Knife";
 }
 
--- Öncelikle orijinal hook'u tanımlıyoruz
-local oldNamecall
-oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-    -- Eğer çağrı executor tarafından değilse (yani oyun tarafından):
-    if not checkcaller() then
-        local method = getnamecallmethod()
-
-        -- Örneğin "FindPartOnRay" veya "Raycast" gibi hedefleme fonksiyonları
-        if method == "FindPartOnRay" or method == "Raycast" then
-            local origin = ...  -- başlangıç pozisyonu
-            local direction = select(2, ...) -- ışın yönü
-
-            local target = getClosestEnemy()  -- bu fonksiyonu kendin tanımlamalısın
-            if target and target:FindFirstChild("Head") then
-                local headPos = target.Head.Position
-                local distance = (headPos - origin).Magnitude
-
-                -- Yeni yön: hedefin kafasına doğru
-                local newDirection = (headPos - origin).Unit * distance
-
-                -- Orijinal fonksiyonu hedefli çağır
-                return oldNamecall(self, origin, newDirection, select(3, ...))
-            end
-        end
-    end
-
-    -- Diğer tüm çağrılar normal şekilde işlenir
-    return oldNamecall(self, ...)
-end)
-
-
 -- // Functions \\ --
 local function ValidCharacter(Character)
    return Character and (Character.FindFirstChildWhichIsA(Character, "Humanoid") and Character.FindFirstChildWhichIsA(Character, "Humanoid").Health ~= 0) or false
