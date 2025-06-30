@@ -63,6 +63,11 @@ local Weapons = {
    "Crude Knife";
 }
 
+-- [ Metatable ] --
+local RawMetatable = getrawmetatable(game)
+local NameCall = RawMetatable.namecall
+local Index = RawMetatable.index
+
 -- // Functions \\ --
 local function ValidCharacter(Character)
    return Character and (Character.FindFirstChildWhichIsA(Character, "Humanoid") and Character.FindFirstChildWhichIsA(Character, "Humanoid").Health ~= 0) or false
